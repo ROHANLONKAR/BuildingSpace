@@ -73,10 +73,27 @@ app.get("/listings", async (req, res) => {
 });
 
 // Delete listing
-app.delete("/listings/:id",authenticateToken, async (req, res) => {
-  const id = Number(req.params.id);
-  await prisma.listing.delete({ where: { id } });
-  res.json({ message: "Deleted" });
+app.delete("/listings/:id", authenticateToken, async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+
+    const deleted = await prisma.listing.deleteMany({
+      where: {
+        id,
+        userId: req.user.id, // 🔥 only delete own listing
+      },
+    });
+
+    if (deleted.count === 0) {
+      return res.status(403).json({ error: "Not authorized or not found" });
+    }
+
+    res.json({ message: "Deleted successfully" });
+
+  } catch (error) {
+    console.error("DELETE ERROR:", error);
+    res.status(500).json({ error: "Delete failed" });
+  }
 });
 
 // ================= AUTH =================

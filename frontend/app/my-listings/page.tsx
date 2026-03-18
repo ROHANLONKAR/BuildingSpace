@@ -44,14 +44,24 @@ export default function MyListingsPage() {
   const deleteListing = async (id: number) => {
     const token = localStorage.getItem("token");
 
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/listings/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/listings/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
-    fetchListings(); // refresh
+    if (!res.ok) {
+      const text = await res.text();
+      console.log("DELETE ERROR:", text);
+      alert("Delete failed");
+      return;
+    }
+
+    fetchListings();
   };
   const updateListing = async () => {
     const token = localStorage.getItem("token");
