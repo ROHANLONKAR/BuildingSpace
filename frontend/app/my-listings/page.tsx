@@ -44,7 +44,7 @@ export default function MyListingsPage() {
   const deleteListing = async (id: number) => {
     const token = localStorage.getItem("token");
 
-    await fetch(`http://localhost:5000/listings/${id}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/listings/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,
