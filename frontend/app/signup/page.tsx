@@ -33,12 +33,21 @@ export default function SignupPage() {
       const data = await res.json();
 
       // Save token + user
+      // ✅ CORRECT
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // optional: don't store user OR store safe object
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          email: form.email,
+          firstName: form.firstName,
+        }),
+      );
 
       alert("Signup successful ✅");
 
-      window.location.href = "/";// go to homepage
+      window.location.href = "/"; // go to homepage
     } catch (error) {
       console.error(error);
       alert("Signup failed ❌");

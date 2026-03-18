@@ -9,9 +9,16 @@ export default function Navbar() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (storedUser) setUser(JSON.parse(storedUser));
+    try {
+      const storedUser = localStorage.getItem("user");
+
+      if (storedUser && storedUser !== "undefined") {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (err) {
+      console.error("User parse error:", err);
+      localStorage.removeItem("user");
+    }
   }, []);
 
   const handleLogout = () => {
