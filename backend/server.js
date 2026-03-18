@@ -73,7 +73,7 @@ app.get("/listings", async (req, res) => {
 });
 
 // Delete listing
-app.delete("/listings/:id", async (req, res) => {
+app.delete("/listings/:id",authenticateToken, async (req, res) => {
   const id = Number(req.params.id);
   await prisma.listing.delete({ where: { id } });
   res.json({ message: "Deleted" });
@@ -130,7 +130,7 @@ app.get("/my-listings", authenticateToken, async (req, res) => {
   }
 });
 
-app.put("/listings/:id", async (req, res) => {
+app.put("/listings/:id", authenticateToken, async (req, res) => {
   try {
     const id = Number(req.params.id);
 
