@@ -8,18 +8,27 @@ export default function Navbar() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [user, setUser] = useState<any>(null);
 
-  useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem("user");
+ useEffect(() => {
+  if (typeof window === "undefined") return;
 
-      if (storedUser && storedUser !== "undefined") {
-        setUser(JSON.parse(storedUser));
-      }
-    } catch (err) {
-      console.error("User parse error:", err);
+  try {
+    const storedUser = localStorage.getItem("user");
+
+    if (
+      storedUser &&
+      storedUser !== "undefined" &&
+      storedUser !== "null"
+    ) {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+    } else {
       localStorage.removeItem("user");
     }
-  }, []);
+  } catch (error) {
+    console.error("Error parsing user:", error);
+    localStorage.removeItem("user");
+  }
+}, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");

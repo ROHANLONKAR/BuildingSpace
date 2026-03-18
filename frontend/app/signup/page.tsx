@@ -41,7 +41,7 @@ export default function SignupPage() {
         "user",
         JSON.stringify({
           email: form.email,
-          firstName: form.firstName,
+          firstName: form.firstName || "User",
         }),
       );
 
